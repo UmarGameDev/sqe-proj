@@ -16,11 +16,11 @@ RUN pip install poetry
 RUN poetry config installer.max-workers 10
 RUN poetry install --only frontend --no-root --no-interaction --no-ansi
 
-# Copy frontend source
-COPY frontend/ frontend/
+# Copy all frontend source (because build context = frontend/)
+COPY . .
 
 # Railway exposes a dynamic PORT
 EXPOSE $PORT
 
 # Run Streamlit on Railway's PORT
-CMD ["sh", "-c", "poetry run streamlit run frontend/app.py --server.address=0.0.0.0 --server.port=$PORT"]
+CMD ["sh", "-c", "poetry run streamlit run app.py --server.address=0.0.0.0 --server.port=$PORT"]
