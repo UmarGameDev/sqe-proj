@@ -1,0 +1,36 @@
+name: Sentry Release Tracking
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install sentry-cli
+        run: |
+          curl -sL https://sentry.io/get-cli/ | bash
+
+      - name: Create Sentry release - Backend
+        run: |
+          export SENTRY_AUTH_TOKEN=96db07f9d90ffc3376e97f9de368b8123f76abc44079e2c921ee511f6a41122a
+          export SENTRY_ORG=rental-properties
+          export SENTRY_PROJECT=rental-properties
+          export RELEASE_VERSION=$(date +%s)
+          sentry-cli releases new $RELEASE_VERSION
+          sentry-cli releases finalize $RELEASE_VERSION
+
+      - name: Create Sentry release - Frontend
+        run: |
+          export SENTRY_AUTH_TOKEN=96db07f9d90ffc3376e97f9de368b8123f76abc44079e2c921ee511f6a41122a
+          export SENTRY_ORG=rental-properties
+          export SENTRY_PROJECT=rental-properties-frontend
+          export RELEASE_VERSION=$(date +%s)
+          sentry-cli releases new $RELEASE_VERSION
+          sentry-cli releases finalize $RELEASE_VERSION
