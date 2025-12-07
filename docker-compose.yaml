@@ -1,0 +1,50 @@
+version: "3.9"
+
+services:
+  rental_database:
+    image: postgres:18
+    restart: always
+    environment:
+      POSTGRES_USER: app_user
+      POSTGRES_DB: app_db
+      POSTGRES_PASSWORD: app_password
+    volumes:
+      - pgdata:/var/lib/postgresql   # ✔ FIX for Postgres 18+
+    ports:
+      - "5432:5432"
+    networks:
+      - mynetwork
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    restart: always
+    environment:
+      DATABASE_URL: "postgresql+asyncpg://app_user:app_password@rental_database:5432/app_db"
+    ports:
+      - "8000:8000"
+    depends_on:
+      - rental_database
+    networks:
+      - mynetwork
+    # ❌ REMOVE bind mount
+    # ❌ REMOVE entrypoint override
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    restart: always
+    ports:
+      - "8501:8501"
+    networks:
+      - mynetwork
+    # ❌ REMOVE bind mount
+
+networks:
+  mynetwork:
+    driver: bridge
+
+volumes:
+  pgdata:
