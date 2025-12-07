@@ -12,6 +12,7 @@ packages = [
 [tool.poetry.dependencies]
 python = "3.12.*"
 pytest-asyncio = "^0.24.0"
+sentry-sdk = "^2.47.0"
 
 [tool.poetry.group.backend.dependencies]
 fastapi = {extras = ["standard"], version = "^0.115"}
