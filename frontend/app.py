@@ -5,22 +5,13 @@ import requests
 import streamlit as st
 
 from response import show_response_message
-import sentry_sdk
 
-sentry_sdk.init(
-    dsn=os.getenv("https://8b7ee69a373d6c3511bad02a72e1ca83@o4510492429582336.ingest.us.sentry.io/4510493804658688"),
-    send_default_pii=True,
-)
 # Read backend URL from Railway environment variable
 BACKEND_URL = os.getenv("BACKEND_URL", "http://localhost:8000").rstrip("/")
 
 st.set_page_config(layout='wide')
 st.title('Rental Property Inventory App')
 
-#error code to check sentry testing
-if st.button("Trigger Error"):
-    raise ValueError("Test frontend error for Sentry")
-    
 # ADD PROPERTY
 with st.expander('Add a new property unit'):
     with st.form('new_item'):
